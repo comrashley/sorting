@@ -1,28 +1,60 @@
+'use strict';
+/* global bubbleSort inOrder swap */
+
+const numerically = function (a, b) { return a - b; }
+
+const generateArray = function (size, lower, upper) {
+  const randomArray = [];
+  while (size--) {
+    let randomNum = Math.floor(lower + Math.random() * upper);
+    randomArray.push(randomNum);
+  }
+  return randomArray;
+}
+
 describe('Bubble Sort', function(){
-    it('handles an empty array', function(){
-        
-      expect( bubbleSort([]) ).toEqual( [] );
+
+  it('sorts an empty array', function(){
+    expect( bubbleSort([]) ).toEqual( [] );
+  });
+
+  it('sorts an array of one element', function(){
+    expect( bubbleSort([7]) ).toEqual( [7] );
+  });
+
+  // it('sorts an array of many elements', function(){
+  //   expect( bubbleSort([5, 2, 7, 9, 3, 5, 4, 1, 0]) ).toEqual([0, 1, 2, 3, 4, 5, 5, 7, 9]);
+  // });
+
+  for (let i = 2; i < 103; i += 20) {
+    it('sorts an array of ' + i + ' random items', function(){
+      const arr = generateArray(i, 0, 100);
+      const sorted = arr.slice(0).sort(numerically);
+      expect( bubbleSort(arr) ).toEqual( sorted );
     });
-    it('handles array with single item', function(){
-        expect( bubbleSort([5])).toEqual([5])
-    });
-    it('handles array thats already in order', function(){
-        expect( bubbleSort([1,2,3])).toEqual([1,2,3])
-    });
-    it('sorts array with multiple items out of order', function(){
-        expect( bubbleSort([6,2,9,3])).toEqual([2,3,6,9])
-    });
-    it('counts number of swaps', function(){
-        spyOn(window,'swap').and.callThrough();
-        var sorted = bubbleSort([9,3,6,2,7,8]);
-        expect(swap.calls.count()).toEqual(7)
-    });
-    it('counts number of compares', function(){
-        spyOn(window,'compare').and.callThrough();
-        var sorted = bubbleSort([9,3,6,2,7,8]);
-        expect(compare.calls.count()).toEqual(15)
-    });
-    it('sorts array with duplicate items', function(){
-        expect( bubbleSort([6,2,9,6,2])).toEqual([2,2,6,6,9])
-    });
+  }
+
+  it('compares the expected number of times', function(){
+    spyOn(window, 'compare').and.callThrough();
+    bubbleSort([4, 6, 5, 1]);
+    expect(compare.calls.count()).toEqual(10);
+  });
+
+  it('swaps the expected number of times', function(){
+    spyOn(window, 'swap').and.callThrough();
+    bubbleSort([4, 6, 5, 1]);
+    expect(swap.calls.count()).toEqual(4);
+  });
+
+  // function spyOn (obj, method) {
+  //   let counter = 0;
+  //   const spy = function () {
+  //     counter++;
+  //   }
+  //   obj[method] = spy;
+  //   spy.calls = {
+  //     count: function() { return counter; }
+  //   };
+  // }
+
 });

@@ -1,5 +1,8 @@
 function bubbleSort(array) { 
     //when done, try removing this if statement
+    if(array.length === 0 || array.length === 1){
+        return array;
+    }
     for( let i = 0; i < array.length-1; i++){
         let doSwap = compare(array[i], array[i+1])
         if (doSwap)
